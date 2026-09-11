@@ -42,6 +42,36 @@ int contarMinasVizinhas(vector<vector<bool>>& minas, int linha, int coluna) {
     return contador;
 }
 
+void abrirCelula(vector<vector<bool>>& minas, vector<vector<bool>>& aberta, int linha, int coluna) {
+    int totalLinhas = minas.size();
+    int totalColunas = minas[0].size();
+
+    if (linha < 0 || linha >= totalLinhas || coluna < 0 || coluna >=totalColunas) {
+        return;
+    }
+    if (aberta[linha][coluna]) {
+        return;
+    }
+    if (minas[linha][coluna]) {
+        return;
+    }
+
+    aberta[linha][coluna] = true;
+
+    int numero = contarMinasVizinhas(minas, linha, coluna);
+
+    if (numero == 0) {
+        abrirCelula(minas, aberta, linha - 1, coluna);
+        abrirCelula(minas, aberta, linha + 1, coluna);
+        abrirCelula(minas, aberta, linha, coluna - 1);
+        abrirCelula(minas, aberta, linha, coluna + 1);
+        abrirCelula(minas, aberta, linha - 1, coluna - 1);
+        abrirCelula(minas, aberta, linha - 1, coluna + 1);
+        abrirCelula(minas, aberta, linha + 1, coluna - 1);
+        abrirCelula(minas, aberta, linha + 1, coluna + 1);
+    }
+}
+
 void imprimirTabuleiro(vector<vector<bool>>& minas, vector<vector<bool>>& aberta, bool mostrarMinas) {
     int linhas = minas.size();
     int colunas = minas[0].size();
@@ -84,6 +114,7 @@ int main() {
 
     gerarMinas(minas, TOTAL_MINAS);
 
+    abrirCelula(minas, aberta, 0, 7);
     imprimirTabuleiro(minas, aberta, true);
 
     return 0;
