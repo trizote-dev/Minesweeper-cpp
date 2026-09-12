@@ -46,7 +46,7 @@ void abrirCelula(vector<vector<bool>>& minas, vector<vector<bool>>& aberta, int 
     int totalLinhas = minas.size();
     int totalColunas = minas[0].size();
 
-    if (linha < 0 || linha >= totalLinhas || coluna < 0 || coluna >=totalColunas) {
+    if (linha < 0 || linha >= totalLinhas || coluna < 0 || coluna >= totalColunas) {
         return;
     }
     if (aberta[linha][coluna]) {
@@ -70,6 +70,20 @@ void abrirCelula(vector<vector<bool>>& minas, vector<vector<bool>>& aberta, int 
         abrirCelula(minas, aberta, linha + 1, coluna - 1);
         abrirCelula(minas, aberta, linha + 1, coluna + 1);
     }
+}
+
+bool verificarVitoria(vector<vector<bool>>& minas, vector<vector<bool>>& aberta) {
+    int linhas = minas.size();
+    int colunas = minas[0].size();
+
+    for (int i = 0; i < linhas; i++) {
+        for (int j = 0; j < colunas; j++) {
+            if (!minas[i][j] && !aberta[i][j]) {
+                return false;
+            }
+        }
+    }
+    return true;
 }
 
 void imprimirTabuleiro(vector<vector<bool>>& minas, vector<vector<bool>>& aberta, bool mostrarMinas) {
@@ -107,15 +121,41 @@ int main() {
 
     int LINHAS = 8;
     int COLUNAS = 8;
-    int TOTAL_MINAS = 10;
+    int TOTAL_MINAS = 2;
 
     vector<vector<bool>> minas(LINHAS, vector<bool>(COLUNAS, false));
     vector<vector<bool>> aberta(LINHAS, vector<bool>(COLUNAS, false));
 
     gerarMinas(minas, TOTAL_MINAS);
 
-    abrirCelula(minas, aberta, 0, 7);
-    imprimirTabuleiro(minas, aberta, true);
+    bool jogoAtivo = true;
+
+    while (jogoAtivo) {
+        imprimirTabuleiro(minas, aberta, false);
+
+        int linhaEscolhida, colunaEscolhida;
+        cout << "Digite a linha e a coluna que deseja abrir (ex: 3 5): ";
+        cin >> linhaEscolhida >> colunaEscolhida;
+
+        if (linhaEscolhida < 0 || linhaEscolhida >= LINHAS || colunaEscolhida < 0 || colunaEscolhida >= COLUNAS) {
+            cout << "Posicao invalida, tente novamente." << endl;
+            continue;
+        }
+
+        if (minas[linhaEscolhida][colunaEscolhida]) {
+            cout << "BOOM! Voce pisou numa mina. Fim de jogo!" << endl;
+            imprimirTabuleiro(minas, aberta, true);
+            jogoAtivo = false;
+        } else {
+            abrirCelula(minas, aberta, linhaEscolhida, colunaEscolhida);
+
+            if (verificarVitoria(minas, aberta)) {
+                cout << "Parabens! Voce venceu o jogo!" << endl;
+                imprimirTabuleiro(minas, aberta, true);
+                jogoAtivo = false;
+            }
+        }
+    }
 
     return 0;
 }
