@@ -1,1 +1,29 @@
- # 🎮 Campo Minado (Minesweeper) Implementação do clássico jogo Campo Minado, feita em duas versões: uma em **C++** (rodando no terminal) e outra em **HTML/CSS/JavaScript** (jogável direto no navegador). ## 🕹️ Jogue agora 👉 **[Jogar a versão web](https://trizote-dev.github.io/Minesweeper-cpp/)** ## 📂 Estrutura do repositório ``` ├── cpp/ → Versão original em C++ (terminal) │ └── exercicios/ → Exercícios de estudo (BFS/DFS, recursão) └── docs/ → Versão web (HTML/CSS/JS), publicada via GitHub Pages ``` ## 🧠 Conceitos aplicados - **Recursão** — abertura de células em cascata quando não há minas vizinhas - **Matrizes** — representação do tabuleiro e das minas - **Geração aleatória** — posicionamento das minas sem repetição - **Manipulação do DOM** (versão web) — criação dinâmica do tabuleiro e resposta a cliques ## 🛠️ Como rodar a versão C++ localmente ```bash cd cpp g++ campo_minado.cpp -o campo_minado ./campo_minado ``` ## 🌐 Como rodar a versão web localmente Basta abrir o arquivo `docs/index.html` em qualquer navegador — não requer instalação nem servidor. ## ✅ Status - [x] Geração de minas e contagem de vizinhas - [x] Abertura em cascata (recursiva) - [x] Condições de vitória e derrota - [x] Versão web responsiva (mobile-friendly) - [x] Botão de reiniciar - [ ] Marcação de bandeiras (em desenvolvimento)
+### 🎮 Campo Minado
+
+Jogo Campo Minado feito em duas versões: C++ (terminal) e Web (HTML/CSS/JS, jogável no navegador).
+
+**[Jogar a versão web](https://trizote-dev.github.io/Minesweeper-cpp/)**
+
+### Estrutura
+
+- `cpp/` — versão em C++
+- `docs/` — versão web
+
+### Conceitos aplicados
+
+- Recursão (abertura de células em cascata)
+- Matrizes (tabuleiro e minas)
+- Geração aleatória de posições
+- Manipulação do DOM (versão web)
+
+### Como rodar a versão C++
+
+\`\`\`
+cd cpp
+g++ campo_minado.cpp -o campo_minado
+./campo_minado
+\`\`\`
+
+### Como rodar a versão web
+
+Abra `docs/index.html` em qualquer navegador.
