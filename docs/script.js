@@ -143,6 +143,14 @@ function criarTabuleiroVisual() {
     }
 }
 
+function reiniciarJogo() {
+    criarMatrizes();
+    gerarMinas();
+    criarTabuleiroVisual();
+}
+
+document.getElementById("botaoReiniciar").addEventListener("click", reiniciarJogo);
+
 criarMatrizes();
 gerarMinas();
 criarTabuleiroVisual();

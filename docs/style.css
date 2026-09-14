@@ -5,20 +5,37 @@ body {
     align-items: center;
     background-color: #2c3e50;
     color: white;
+    margin: 0;
+    padding: 20px;
 }
-.celula.mina {
-    background-color: #e74c3c;
+
+#botaoReiniciar {
+    margin-top: 15px;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
 }
+
+#botaoReiniciar:hover {
+    background-color: #2980b9;
+}
+
 #tabuleiro {
     display: grid;
-    grid-template-columns: repeat(8, 40px);
+    grid-template-columns: repeat(8, minmax(30px, 12vw));
     gap: 2px;
     margin-top: 20px;
+    max-width: 95vw;
 }
 
 .celula {
-    width: 40px;
-    height: 40px;
+    aspect-ratio: 1 / 1;
+    width: 100%;
     background-color: #bdc3c7;
     border: 1px solid #7f8c8d;
     display: flex;
@@ -27,6 +44,7 @@ body {
     font-weight: bold;
     cursor: pointer;
     user-select: none;
+    font-size: clamp(12px, 3vw, 20px);
 }
 
 .celula:hover {
@@ -37,4 +55,8 @@ body {
     background-color: #ecf0f1;
     cursor: default;
     color: #2c3e50;
+}
+
+.celula.mina {
+    background-color: #e74c3c;
 }
