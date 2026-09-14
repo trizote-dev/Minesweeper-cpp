@@ -77,6 +77,29 @@ function abrirCelula(linha, coluna) {
     }
 }
 
+function verificarVitoria() {
+    for (let i = 0; i < LINHAS; i++) {
+        for (let j = 0; j < COLUNAS; j++) {
+            if (!minas[i][j] && !aberta[i][j]) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+function revelarMinas() {
+    const celulas = document.querySelectorAll(".celula");
+    celulas.forEach(celula => {
+        const linha = parseInt(celula.dataset.linha);
+        const coluna = parseInt(celula.dataset.coluna);
+        if (minas[linha][coluna]) {
+            celula.classList.add("mina");
+            celula.textContent = "💣";
+        }
+    });
+}
+
 function atualizarVisual() {
     const celulas = document.querySelectorAll(".celula");
     celulas.forEach(celula => {
@@ -101,8 +124,18 @@ function criarTabuleiroVisual() {
             celula.dataset.coluna = j;
 
             celula.addEventListener("click", () => {
+                if (minas[i][j]) {
+                    revelarMinas();
+                    alert("BOOM! Voce pisou numa mina. Fim de jogo!");
+                    return;
+                }
+
                 abrirCelula(i, j);
                 atualizarVisual();
+
+                if (verificarVitoria()) {
+                    alert("Parabens! Voce venceu o jogo!");
+                }
             });
 
             tabuleiroElemento.appendChild(celula);
