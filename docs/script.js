@@ -1,10 +1,32 @@
-const LINHAS = 8;
-const COLUNAS = 8;
-const TOTAL_MINAS = 10;
+let LINHAS = 8;
+let COLUNAS = 8;
+let TOTAL_MINAS = 10;
 let tempoInicio = null;
 let jogoComecou = false;
 let intervaloCronometro = null;
 let nomeJogador = "";
+const fases = [
+  { numero: 1, linhas: 8,  colunas: 8,  minas: 10, tempoLimite: 60 },
+  { numero: 2, linhas: 10, colunas: 10, minas: 18, tempoLimite: 55 },
+  { numero: 3, linhas: 12, colunas: 12, minas: 28, tempoLimite: 50 },
+  { numero: 4, linhas: 14, colunas: 14, minas: 40, tempoLimite: 45 },
+];
+
+let faseAtual = 0;
+
+function atualizarVariaveisDaFase() {
+  const dadosFase = fases[faseAtual];
+  LINHAS = dadosFase.linhas;
+  COLUNAS = dadosFase.colunas;
+  TOTAL_MINAS = dadosFase.minas;
+}
+
+function iniciarFase() {
+    atualizarVariaveisDaFase();
+    criarMatrizes();
+    gerarMinas();
+    criarTabuleiroVisual();
+}
 
 let minas = [];
 let aberta = [];
@@ -119,8 +141,21 @@ function atualizarVisual() {
 }
 
 function atualizaCronometro() {
-    const segundos = Math.floor((Date.now() - tempoInicio) / 1000);
-    document.getElementById("cronometro").textContent = `Tempo: ${segundos}s`;
+    const dadosFase = fases[faseAtual];
+    const segundosPassados = Math.floor((Date.now() - tempoInicio) / 1000);
+    const segundosRestantes = dadosFase.tempoLimite - segundosPassados;
+
+        if (segundosRestantes <= 0) {
+        document.getElementById("cronometro").textContent = "Tempo: 0s";
+        clearInterval(intervaloCronometro);
+        alert(`Tempo esgotado na fase ${dadosFase.numero}! Tentando novamente...`);
+        iniciarFase();
+        jogoComecou = false;
+        tempoInicio = null;
+        return;
+    }
+
+    document.getElementById("cronometro").textContent = `Tempo: ${segundosRestantes}s`;
 }
 
 function salvarRanking(nome, tempo) {
@@ -150,6 +185,7 @@ function renderizarRanking() {
 
 function criarTabuleiroVisual() {
     tabuleiroElemento.innerHTML = "";
+    tabuleiroElemento.style.gridTemplateColumns = `repeat(${COLUNAS}, minmax(28px, 45px))`;
     for (let i = 0; i < LINHAS; i++) {
         for (let j = 0; j < COLUNAS; j++) {
             const celula = document.createElement("div");
@@ -174,12 +210,21 @@ function criarTabuleiroVisual() {
                 abrirCelula(i, j);
                 atualizarVisual();
 
-                if (verificarVitoria()) {
+                    if (verificarVitoria()) {
                     clearInterval(intervaloCronometro);
-                    const tempoFinal = Math.floor((Date.now() - tempoInicio) / 1000);
-                    salvarRanking(nomeJogador, tempoFinal);
-                    renderizarRanking();
-                    alert(`Parabens, ${nomeJogador}! Voce venceu em ${tempoFinal} segundos!`);
+
+                    if (faseAtual < fases.length - 1) {
+                        alert(`Fase ${fases[faseAtual].numero} concluida! Preparando a proxima fase...`);
+                        faseAtual++;
+                        iniciarFase();
+                        jogoComecou = false;
+                        tempoInicio = null;
+                    } else {
+                        const tempoFinal = Math.floor((Date.now() - tempoInicio) / 1000);
+                        salvarRanking(nomeJogador, tempoFinal);
+                        renderizarRanking();
+                        alert(`Parabens, ${nomeJogador}! Voce venceu todas as fases em ${tempoFinal} segundos!`);
+                    }
                 }
             });
 
@@ -188,11 +233,10 @@ function criarTabuleiroVisual() {
     }
 }
 
+
 function reiniciarJogo() {
-    clearInterval(intervaloCronometro);
-    criarMatrizes();
-    gerarMinas();
-    criarTabuleiroVisual();
+        clearInterval(intervaloCronometro);
+    iniciarFase();
     jogoComecou = false;
     tempoInicio = null;
     document.getElementById("cronometro").textContent = "Tempo: 0s";
@@ -210,9 +254,7 @@ function iniciarJogoComNome() {
     document.getElementById("telaNickname").style.display = "none";
     document.getElementById("jogo").classList.remove("escondido");
 
-    criarMatrizes();
-    gerarMinas();
-    criarTabuleiroVisual();
+    iniciarFase();
     renderizarRanking();
 }
 
