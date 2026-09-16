@@ -7,10 +7,29 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Campo Minado</h1>
-    <button id="botaoReiniciar">Reiniciar Jogo</button>
-    <p id="cronometro">tempo: 0s</p>
-    <div id="tabuleiro"></div>
+
+    <div id="telaNickname" class="overlay">
+        <div class="caixaNickname">
+            <h2>Campo Minado</h2>
+            <p>Digite seu nome para jogar:</p>
+            <input type="text" id="inputNome" maxlength="15" placeholder="Seu nome">
+            <button id="botaoEntrar">Entrar</button>
+        </div>
+    </div>
+
+    <div id="jogo" class="escondido">
+        <h1>Campo Minado</h1>
+        <p id="jogadorAtual"></p>
+        <button id="botaoReiniciar">Reiniciar Jogo</button>
+        <p id="cronometro">Tempo: 0s</p>
+        <div id="tabuleiro"></div>
+
+        <div id="painelRanking">
+            <h3>🏆 Melhores Tempos</h3>
+            <ol id="listaRanking"></ol>
+        </div>
+    </div>
+
     <script src="script.js"></script>
 </body>
 </html>

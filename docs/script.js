@@ -4,6 +4,7 @@ const TOTAL_MINAS = 10;
 let tempoInicio = null;
 let jogoComecou = false;
 let intervaloCronometro = null;
+let nomeJogador = "";
 
 let minas = [];
 let aberta = [];
@@ -122,6 +123,31 @@ function atualizaCronometro() {
     document.getElementById("cronometro").textContent = `Tempo: ${segundos}s`;
 }
 
+function salvarRanking(nome, tempo) {
+    let ranking = JSON.parse(localStorage.getItem("rankingCampoMinado")) || [];
+    ranking.push({ nome: nome, tempo: tempo });
+    ranking.sort((a, b) => a.tempo - b.tempo);
+    ranking = ranking.slice(0, 5);
+    localStorage.setItem("rankingCampoMinado", JSON.stringify(ranking));
+}
+
+function renderizarRanking() {
+    const ranking = JSON.parse(localStorage.getItem("rankingCampoMinado")) || [];
+    const lista = document.getElementById("listaRanking");
+    lista.innerHTML = "";
+
+    if (ranking.length === 0) {
+        lista.innerHTML = "<li>Nenhum recorde ainda.</li>";
+        return;
+    }
+
+    ranking.forEach(item => {
+        const linha = document.createElement("li");
+        linha.textContent = `${item.nome} — ${item.tempo}s`;
+        lista.appendChild(linha);
+    });
+}
+
 function criarTabuleiroVisual() {
     tabuleiroElemento.innerHTML = "";
     for (let i = 0; i < LINHAS; i++) {
@@ -151,7 +177,9 @@ function criarTabuleiroVisual() {
                 if (verificarVitoria()) {
                     clearInterval(intervaloCronometro);
                     const tempoFinal = Math.floor((Date.now() - tempoInicio) / 1000);
-                    alert(`Parabens! Voce venceu em ${tempoFinal} segundos!`);
+                    salvarRanking(nomeJogador, tempoFinal);
+                    renderizarRanking();
+                    alert(`Parabens, ${nomeJogador}! Voce venceu em ${tempoFinal} segundos!`);
                 }
             });
 
@@ -170,8 +198,23 @@ function reiniciarJogo() {
     document.getElementById("cronometro").textContent = "Tempo: 0s";
 }
 
-document.getElementById("botaoReiniciar").addEventListener("click", reiniciarJogo);
+function iniciarJogoComNome() {
+    const valor = document.getElementById("inputNome").value.trim();
+    if (valor === "") {
+        alert("Por favor, digite um nome antes de continuar.");
+        return;
+    }
 
-criarMatrizes();
-gerarMinas();
-criarTabuleiroVisual();
+    nomeJogador = valor;
+    document.getElementById("jogadorAtual").textContent = `Jogando como: ${nomeJogador}`;
+    document.getElementById("telaNickname").style.display = "none";
+    document.getElementById("jogo").classList.remove("escondido");
+
+    criarMatrizes();
+    gerarMinas();
+    criarTabuleiroVisual();
+    renderizarRanking();
+}
+
+document.getElementById("botaoEntrar").addEventListener("click", iniciarJogoComNome);
+document.getElementById("botaoReiniciar").addEventListener("click", reiniciarJogo);
