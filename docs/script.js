@@ -1,6 +1,9 @@
 const LINHAS = 8;
 const COLUNAS = 8;
 const TOTAL_MINAS = 10;
+let tempoInicio = null;
+let jogoComecou = false;
+let intervaloCronometro = null;
 
 let minas = [];
 let aberta = [];
@@ -114,6 +117,11 @@ function atualizarVisual() {
     });
 }
 
+function atualizaCronometro() {
+    const segundos = Math.floor((Date.now() - tempoInicio) / 1000);
+    document.getElementById("cronometro").textContent = `Tempo: ${segundos}s`;
+}
+
 function criarTabuleiroVisual() {
     tabuleiroElemento.innerHTML = "";
     for (let i = 0; i < LINHAS; i++) {
@@ -124,7 +132,14 @@ function criarTabuleiroVisual() {
             celula.dataset.coluna = j;
 
             celula.addEventListener("click", () => {
+                if (!jogoComecou) {
+                    tempoInicio = Date.now();
+                    jogoComecou = true;
+                    intervaloCronometro = setInterval(atualizaCronometro, 1000);
+                }
+
                 if (minas[i][j]) {
+                    clearInterval(intervaloCronometro);
                     revelarMinas();
                     alert("BOOM! Voce pisou numa mina. Fim de jogo!");
                     return;
@@ -134,7 +149,9 @@ function criarTabuleiroVisual() {
                 atualizarVisual();
 
                 if (verificarVitoria()) {
-                    alert("Parabens! Voce venceu o jogo!");
+                    clearInterval(intervaloCronometro);
+                    const tempoFinal = Math.floor((Date.now() - tempoInicio) / 1000);
+                    alert(`Parabens! Voce venceu em ${tempoFinal} segundos!`);
                 }
             });
 
@@ -144,9 +161,13 @@ function criarTabuleiroVisual() {
 }
 
 function reiniciarJogo() {
+    clearInterval(intervaloCronometro);
     criarMatrizes();
     gerarMinas();
     criarTabuleiroVisual();
+    jogoComecou = false;
+    tempoInicio = null;
+    document.getElementById("cronometro").textContent = "Tempo: 0s";
 }
 
 document.getElementById("botaoReiniciar").addEventListener("click", reiniciarJogo);
