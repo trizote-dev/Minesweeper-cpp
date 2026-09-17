@@ -5,6 +5,7 @@ let tempoInicio = null;
 let jogoComecou = false;
 let intervaloCronometro = null;
 let nomeJogador = "";
+
 const fases = [
   { numero: 1, linhas: 8,  colunas: 8,  minas: 10, tempoLimite: 60 },
   { numero: 2, linhas: 10, colunas: 10, minas: 18, tempoLimite: 55 },
@@ -30,15 +31,18 @@ function iniciarFase() {
 
 let minas = [];
 let aberta = [];
+let marcada = [];
 
 const tabuleiroElemento = document.getElementById("tabuleiro");
 
 function criarMatrizes() {
     minas = [];
     aberta = [];
+    marcada = [];
     for (let i = 0; i < LINHAS; i++) {
         minas.push(new Array(COLUNAS).fill(false));
         aberta.push(new Array(COLUNAS).fill(false));
+        marcada.push(new Array(COLUNAS).fill(false));
     }
 }
 
@@ -145,7 +149,7 @@ function atualizaCronometro() {
     const segundosPassados = Math.floor((Date.now() - tempoInicio) / 1000);
     const segundosRestantes = dadosFase.tempoLimite - segundosPassados;
 
-        if (segundosRestantes <= 0) {
+    if (segundosRestantes <= 0) {
         document.getElementById("cronometro").textContent = "Tempo: 0s";
         clearInterval(intervaloCronometro);
         alert(`Tempo esgotado na fase ${dadosFase.numero}! Tentando novamente...`);
@@ -186,6 +190,7 @@ function renderizarRanking() {
 function criarTabuleiroVisual() {
     tabuleiroElemento.innerHTML = "";
     tabuleiroElemento.style.gridTemplateColumns = `repeat(${COLUNAS}, minmax(28px, 45px))`;
+
     for (let i = 0; i < LINHAS; i++) {
         for (let j = 0; j < COLUNAS; j++) {
             const celula = document.createElement("div");
@@ -210,7 +215,7 @@ function criarTabuleiroVisual() {
                 abrirCelula(i, j);
                 atualizarVisual();
 
-                    if (verificarVitoria()) {
+                if (verificarVitoria()) {
                     clearInterval(intervaloCronometro);
 
                     if (faseAtual < fases.length - 1) {
@@ -228,14 +233,29 @@ function criarTabuleiroVisual() {
                 }
             });
 
+            celula.addEventListener("contextmenu", (e) => {
+                e.preventDefault();
+
+                if (aberta[i][j]) {
+                    return;
+                }
+
+                marcada[i][j] = !marcada[i][j];
+
+                if (marcada[i][j]) {
+                    celula.textContent = "🚩";
+                } else {
+                    celula.textContent = "";
+                }
+            });
+
             tabuleiroElemento.appendChild(celula);
         }
     }
 }
 
-
 function reiniciarJogo() {
-        clearInterval(intervaloCronometro);
+    clearInterval(intervaloCronometro);
     iniciarFase();
     jogoComecou = false;
     tempoInicio = null;
