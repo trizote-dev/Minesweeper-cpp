@@ -249,6 +249,21 @@ function criarTabuleiroVisual() {
                 }
             });
 
+             let temporizadorToque = null;
+            let foiLongPress = false;
+
+            celula.addEventListener("touchstart", (e) => {
+                foiLongPress = false;
+                temporizadorToque = setTimeout(() => {
+                    foiLongPress = true;
+                    console.log(`Long press na celula [${i}][${j}]`);
+                }, 500);
+            });
+
+            celula.addEventListener("touchend", (e) => {
+                clearTimeout(temporizadorToque);
+            });
+
             tabuleiroElemento.appendChild(celula);
         }
     }
