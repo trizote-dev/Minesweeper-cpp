@@ -5,6 +5,7 @@ let tempoInicio = null;
 let jogoComecou = false;
 let intervaloCronometro = null;
 let nomeJogador = "";
+let modoCronometro = "decrescente";
 
 const fases = [
   { numero: 1, linhas: 8,  colunas: 8,  minas: 10, tempoLimite: 60 },
@@ -145,8 +146,14 @@ function atualizarVisual() {
 }
 
 function atualizaCronometro() {
-    const dadosFase = fases[faseAtual];
     const segundosPassados = Math.floor((Date.now() - tempoInicio) / 1000);
+
+    if (modoCronometro === "crescente") {
+        document.getElementById("cronometro").textContent = `Tempo: ${segundosPassados}s`;
+        return;
+    }
+
+    const dadosFase = fases[faseAtual];
     const segundosRestantes = dadosFase.tempoLimite - segundosPassados;
 
     if (segundosRestantes <= 0) {
@@ -249,21 +256,6 @@ function criarTabuleiroVisual() {
                 }
             });
 
-             let temporizadorToque = null;
-            let foiLongPress = false;
-
-            celula.addEventListener("touchstart", (e) => {
-                foiLongPress = false;
-                temporizadorToque = setTimeout(() => {
-                    foiLongPress = true;
-                    console.log(`Long press na celula [${i}][${j}]`);
-                }, 500);
-            });
-
-            celula.addEventListener("touchend", (e) => {
-                clearTimeout(temporizadorToque);
-            });
-
             tabuleiroElemento.appendChild(celula);
         }
     }
@@ -285,6 +277,8 @@ function iniciarJogoComNome() {
     }
 
     nomeJogador = valor;
+    const opcaoMarcada = document.querySelector('input[name="modoCronometro"]:checked');
+    modoCronometro = opcaoMarcada.value;
     document.getElementById("jogadorAtual").textContent = `Jogando como: ${nomeJogador}`;
     document.getElementById("telaNickname").style.display = "none";
     document.getElementById("jogo").classList.remove("escondido");

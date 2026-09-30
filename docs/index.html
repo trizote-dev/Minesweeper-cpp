@@ -12,7 +12,19 @@
         <div class="caixaNickname">
             <h2>Campo Minado</h2>
             <p>Digite seu nome para jogar:</p>
-            <input type="text" id="inputNome" maxlength="15" placeholder="Seu nome">
+                        <input type="text" id="inputNome" maxlength="15" placeholder="Seu nome">
+
+            <div class="opcaoCronometro">
+                <label>
+                    <input type="radio" name="modoCronometro" value="decrescente" checked>
+                    Decrescente (com tempo limite)
+                </label>
+                <label>
+                    <input type="radio" name="modoCronometro" value="crescente">
+                    Crescente (sem tempo limite)
+                </label>
+            </div>
+
             <button id="botaoEntrar">Entrar</button>
         </div>
     </div>
