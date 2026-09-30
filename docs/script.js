@@ -3,6 +3,7 @@ let COLUNAS = 8;
 let TOTAL_MINAS = 10;
 let tempoInicio = null;
 let jogoComecou = false;
+let jogoAtivo = true;
 let intervaloCronometro = null;
 let nomeJogador = "";
 let modoCronometro = "decrescente";
@@ -28,6 +29,7 @@ function iniciarFase() {
     criarMatrizes();
     gerarMinas();
     criarTabuleiroVisual();
+    jogoAtivo = true;
 }
 
 let minas = [];
@@ -126,7 +128,7 @@ function revelarMinas() {
         const coluna = parseInt(celula.dataset.coluna);
         if (minas[linha][coluna]) {
             celula.classList.add("mina");
-            celula.textContent = "💣";
+            celula.textContent = "⚫";
         }
     });
 }
@@ -206,16 +208,21 @@ function criarTabuleiroVisual() {
             celula.dataset.coluna = j;
 
             celula.addEventListener("click", () => {
+                if (!jogoAtivo) {
+                return;
+                }
+
                 if (!jogoComecou) {
                     tempoInicio = Date.now();
                     jogoComecou = true;
                     intervaloCronometro = setInterval(atualizaCronometro, 1000);
                 }
 
-                if (minas[i][j]) {
+                    if (minas[i][j]) {
                     clearInterval(intervaloCronometro);
+                    jogoAtivo = false;
                     revelarMinas();
-                    alert("BOOM! Voce pisou numa mina. Fim de jogo!");
+                    alert("Voce foi engolido pelo Gargantua! Fim de jogo.");
                     return;
                 }
 

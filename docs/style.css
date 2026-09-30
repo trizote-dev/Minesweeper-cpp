@@ -84,8 +84,8 @@ body {
     padding: 10px 20px;
     font-size: 16px;
     font-weight: bold;
-    background-color: #3498db;
-    color: white;
+    background-color: #ff8c3f;
+    color: #12121f;
     border: none;
     border-radius: 6px;
     cursor: pointer;
@@ -94,7 +94,7 @@ body {
 }
 
 #botaoReiniciar:hover {
-    background-color: #2980b9;
+    background-color: #ffab6b;
 }
 
 .escondido {
@@ -117,6 +117,10 @@ body {
     gap: 2px;
     margin-top: 20px;
     max-width: 95vw;
+    position: relative;
+    padding: 30px;
+    background: radial-gradient(circle at 50% 50%, rgba(255, 140, 63, 0.25) 0%, rgba(255, 140, 63, 0.08) 40%, transparent 70%);
+    border-radius: 50%;
 }
 
 .celula {
@@ -144,18 +148,22 @@ body {
 }
 
 .celula.mina {
-    background-color: #e74c3c;
+    background-color: #000000;
+    box-shadow: 0 0 12px 4px rgba(255, 140, 63, 0.6);
 }
 
 #painelRanking {
     margin-top: 25px;
-    background-color: #34495e;
+    background-color: #12121f;
     padding: 15px 25px;
     border-radius: 10px;
     min-width: 220px;
+    border: 1px solid #ff8c3f;
+    box-shadow: 0 0 15px rgba(255, 140, 63, 0.25);
 }
 
 #painelRanking h3 {
+    color: #ff8c3f;
     margin-top: 0;
     text-align: center;
 }
@@ -190,4 +198,9 @@ body {
 
 .opcaoCronometro label {
     cursor: pointer;
+}
+
+#jogo h1 {
+    color: #ff8c3f;
+    text-shadow: 0 0 12px rgba(255, 140, 63, 0.6);
 }
