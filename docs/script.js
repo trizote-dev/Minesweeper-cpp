@@ -296,3 +296,13 @@ function iniciarJogoComNome() {
 
 document.getElementById("botaoEntrar").addEventListener("click", iniciarJogoComNome);
 document.getElementById("botaoReiniciar").addEventListener("click", reiniciarJogo);
+
+const videoFundo = document.getElementById("videoFundo");
+
+videoFundo.addEventListener("error", () => {
+    console.log("Erro ao carregar o vídeo de fundo:", videoFundo.error);
+});
+
+videoFundo.play().catch((erro) => {
+    console.log("Autoplay do vídeo bloqueado:", erro);
+});
